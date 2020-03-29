@@ -53,22 +53,28 @@ class Add_SecCode():
     '''
     def __init__(self,code):
         print('Start... Add_SC Process')
+        conn = sqlite3.connect('Data.sqlite3')
+        c = conn.cursor()
+        val = int(code)
         instanceU = SQLMatch('SecCodeUseage',code)
         if instanceU.ret_val:
             instanceL = SQLMatch('SecCodeList',code)
             if instanceL.ret_val:
                 print("Error: Registered Code")
             else:
+                print(val)
+                print(type(val))
+                c.execute("insert into SecCodeList values ('%d') " % val)
                 print("Success")
         else:
             print("Error: Unused Code")
         print('End...   Add_SC Process')
+        conn.commit()
+        conn.close()
 
 #4桁の数字か？
 #if repatter.match(str(row[0])):
 #SecCodeListにcodeを追加する
-#   c.execute('insert into ? values ?',(dbname,target))
-        pass
 
 #CreateTable()
 
