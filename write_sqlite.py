@@ -72,11 +72,20 @@ class Add_SecCode():
         conn.commit()
         conn.close()
 
+class UpdateData():
+    def __init__(self,uptime,code,name,price):
+        conn = sqlite3.connect('Data.sqlite3')
+        c = conn.cursor()
+        c.execute("insert into OriginData values (?,?,?,?) " (uptime,code,name,price))
+        conn.commit()
+        conn.close()
+
+### Gabages
 #4桁の数字か？
 #if repatter.match(str(row[0])):
 #SecCodeListにcodeを追加する
-
 #CreateTable()
+###
 
 code = input()
 result = repatter.match(code)

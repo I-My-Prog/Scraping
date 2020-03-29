@@ -1,11 +1,27 @@
 import urllib.request
 import lxml.html
+import sqlite3
+import time
 #from bs4 import BeautifulSoup as bs
+dbname = 'Data.sqlite3'
+conn = sqlite3.connect(dbname)
+cur = conn.cursor()
+DELAY_TIME = 1
 
-url = "https://kabutan.jp/stock/?code=2768"
-soup = urllib.request.urlopen(url)
+list_code = []
+for a in cur.execute('SELECT * FROM SecCodeList'):
+    x, = a
+    list_code.append(x)
+for code in list_code:
+    time.sleep(DELAY_TIME)
+    url = "https://kabutan.jp/stock/?code="+str(code)
+    soup = urllib.request.urlopen(url)
+    dom = lxml.html.fromstring(soup.read())
 
-dom = lxml.html.fromstring(soup.read())
+    code = dom.xpath('//*[@id="stockinfo_i1"]/div[1]/h2/span/text()')
+    name = dom.xpath('//*[@id="stockinfo_i1"]/div[1]/h2/text()')
+    price = dom.xpath('//*[@id="stockinfo_i1"]/div[2]/span[2]/text()')
+    print(code,name,price)
 
-s = dom.xpath('string(/html/body/div[1]/div[3]/div[1]/div[3]/div[1]/table/tbody/tr[3]/td[1]/span)')
-print(s)
+cur.close()
+conn.close()
