@@ -3,6 +3,7 @@ import lxml.html
 import sqlite3
 import datetime
 import time
+from write_sqlite import SQLMatch
 #from bs4 import BeautifulSoup as bs
 
 class Scrape():
@@ -22,6 +23,10 @@ class Scrape():
 #        print(tuple_x)
     
     def Record(self):
+        print(self.tuple_x)
+        if SQLMatch('OriginData',self.code):
+            sql = "delete from Origindata where Sec_Code = ?"
+            cur.execute(sql,self.code)
         sql = 'insert into OriginData values (?,?,?,?)'
         cur.execute(sql,self.tuple_x)
 

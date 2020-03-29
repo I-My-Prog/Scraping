@@ -86,10 +86,10 @@ class UpdateData():
 #SecCodeListにcodeを追加する
 #CreateTable()
 ###
-
+'''
 code = input()
 result = repatter.match(code)
 print('================================')
 
 if result:
-    Add_SecCode(int(code))
+    Add_SecCode(int(code))'''
