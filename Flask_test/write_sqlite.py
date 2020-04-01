@@ -1,3 +1,7 @@
+#===============================
+#Regasy; Conversion to sqlite_ctrl.py
+#2020-03-29/akata
+#===============================
 import sqlite3
 import re
 

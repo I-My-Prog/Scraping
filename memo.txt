@@ -1,0 +1,3 @@
+やること
+    HTMLにDBを一覧表示
+    WEBからSecCodeListの編集
