@@ -2,8 +2,6 @@
 #Rewrite of write_sqlite.py by SQLalchemy
 #2020-04-01/akata
 #===============================
-
-
 import sqlite3
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -15,7 +13,7 @@ import datetime
 engine = create_engine('sqlite:///Data.sqlite3')
 Base=declarative_base()
 
-Session = sessionmaker(bind = engine)
+Session = sessionmaker(engine)
 session = Session()
 
 class OriginData(Base):
@@ -37,15 +35,23 @@ Base.metadata.create_all(engine)
 
 class Insert_OD():
     def __init__(self,sec_code,sec_name,stock_p):
+        self.code = sec_code[0]
+        self.name = sec_name[0]
+        self.p = stock_p
         dt = datetime.datetime.now()
         date = dt.strftime('%Y-%m%d %H%M')
-        New_data=OriginData(time=date,Sec_Code=sec_code,Sec_Name=sec_name,Stock_price=stock_p)
+        New_data=OriginData(time=date,Sec_Code=self.code,Sec_Name=self.name,Stock_price=self.p)
+        print(New_data)
         session.add(New_data)
         session.commit()
+        session.close()
 
 class Update_OD():
     def __init__(self,code,name,price):
-        session.query(OriginData).filter(OriginData.Sec_Code==code).delete()
+        print(code)
+        test = session.query(OriginData).all()
+        data = session.query(OriginData).filter(OriginData.Sec_Code=="2768").all()
+        session.query(OriginData).filter(OriginData.Sec_Code==int(code[0])).delete()
         Insert_OD(code,name,price)
         session.commit()
 
@@ -73,7 +79,7 @@ class Insert_SCL():
 
 class Delete_SCL():
     def __init__(self,target):
-        session.query(SecCodeList).filter(SecCodeList.Sec_Code=target).delete()
+        session.query(SecCodeList).filter(SecCodeList.Sec_Code==target).delete()
         session.commit()
 
 class Update_SCL():
@@ -90,3 +96,14 @@ class Update_SCL():
             else:
                 pass
         session.commit()
+
+class Select_SCL():
+    #get all data from db
+    def __init__(self):
+        self.data = session.query(SecCodeList.Sec_Code).all()
+        print(self.data)
+        session.commit()
+        session.close()
+
+    def ret(self):
+        return self.data
